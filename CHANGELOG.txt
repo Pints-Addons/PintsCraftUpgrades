@@ -1,0 +1,8 @@
+Pint's Craft Upgrades - Changelog
+
+v3.1
+- First public release as Pint's Craft Upgrades.
+- Pick any of your characters (from Pint's Alts), not just the one you're on.
+- Craft for Alts: what one character can make that would upgrade the others.
+- Docks into Pint's Alts as its Craft Upgrades tab, with your characters down the left.
+- Wearable soon now looks 0-30 levels ahead.
