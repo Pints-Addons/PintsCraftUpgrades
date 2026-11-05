@@ -2,6 +2,10 @@
 -- An item's value = sum of (stat amount x weight) for the character's role; an upgrade is an item worth
 -- more than what's equipped in that slot. Roles come from class + the talent tree with the most points,
 -- and can be overridden per character with /craftup role <name>.
+-- Compatibility: WoW Forever runs on the modern game client, where these older functions moved or were renamed.
+local GetItemInfo = GetItemInfo or (C_Item and C_Item.GetItemInfo)
+local GetItemStats = GetItemStats or (C_Item and C_Item.GetItemStats)
+
 local S = {}
 _G.CraftUpgradesScore = S
 

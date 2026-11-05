@@ -32,3 +32,7 @@ COMMANDS
 
 Pint's Craft Upgrades - by Jake (Pint's Add-ons), built with Claude. Original scoring - no Pawn code or data.
 World of Warcraft names and game data are the property of Blizzard Entertainment.
+
+FEEDBACK
+  Report a bug or suggest an idea: https://github.com/Pints-Addons/PintsCraftUpgrades/issues
+  Source code: https://github.com/Pints-Addons/PintsCraftUpgrades

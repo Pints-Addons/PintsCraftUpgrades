@@ -1,5 +1,9 @@
 Pint's Craft Upgrades - Changelog
 
+v3.2
+- Works on WoW Forever (the modern game client). Classic Era is unchanged.
+- Uses the modern item, spell and profession functions where the old ones are gone.
+
 v3.1
 - First public release as Pint's Craft Upgrades.
 - Pick any of your characters (from Pint's Alts), not just the one you're on.

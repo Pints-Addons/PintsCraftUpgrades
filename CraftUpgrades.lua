@@ -5,6 +5,30 @@
 -- (Score.lua) against what's equipped, and lists the upgrades by gear slot with who can craft it.
 -- Works through the list a few items at a time so it stays under Hardcore's script time limit.
 
+-- Compatibility: WoW Forever runs on the modern game client, where these older functions moved or were renamed.
+local GetItemInfo = GetItemInfo or (C_Item and C_Item.GetItemInfo)
+local GetItemInfoInstant = GetItemInfoInstant or (C_Item and C_Item.GetItemInfoInstant)
+local GetItemIcon = GetItemIcon or (C_Item and C_Item.GetItemIconByID)
+local GetNumSkillLines, GetSkillLineInfo = GetNumSkillLines, GetSkillLineInfo
+if not GetNumSkillLines and GetProfessions then
+	local lines = {}
+	GetNumSkillLines = function()
+		wipe(lines)
+		local p = { GetProfessions() }
+		for k = 1, 6 do
+			if p[k] then
+				local name, _, rank, maxRank = GetProfessionInfo(p[k])
+				if name then lines[#lines + 1] = { name, rank, maxRank } end
+			end
+		end
+		return #lines
+	end
+	GetSkillLineInfo = function(i)
+		local l = lines[i]
+		if l then return l[1], false, false, l[2], 0, 0, l[3] end
+	end
+end
+
 local BATCH = 8           -- items checked per step
 local STEP = 0.05
 
