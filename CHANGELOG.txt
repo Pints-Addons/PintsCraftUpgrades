@@ -1,5 +1,9 @@
 Pint's Craft Upgrades - Changelog
 
+v3.2.1
+- WoW Forever: characters are known by their full name (first and second, e.g. "Pint Waterboy"), so characters that
+  share a first name no longer share one record. Classic Era is unchanged.
+
 v3.2
 - Works on WoW Forever (the modern game client). Classic Era is unchanged.
 - Uses the modern item, spell and profession functions where the old ones are gone.

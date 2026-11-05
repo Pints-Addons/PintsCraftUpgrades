@@ -291,7 +291,7 @@ local target
 local altsMode = false
 local Scan
 local function Ledger() return _G.PintsLedger end
-local function Me() return UnitName("player") end
+local function Me() return (GetUnitName and GetUnitName("player", false) or UnitName("player")) end
 local function ClassColor(classFile, name)
   local c = classFile and RAID_CLASS_COLORS and RAID_CLASS_COLORS[classFile]
   return c and ("|c" .. (c.colorStr or "ffffffff") .. name .. "|r") or name

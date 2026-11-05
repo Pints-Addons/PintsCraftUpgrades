@@ -51,7 +51,7 @@ end
 
 function S.RoleKey()
   local db = CraftUpgradesDB or {}
-  local key = UnitName("player") .. "-" .. GetRealmName()
+  local key = (GetUnitName and GetUnitName("player", false) or UnitName("player")) .. "-" .. GetRealmName()
   if db.role and db.role[key] and S.ROLES[db.role[key]] then return db.role[key], true end
   local _, class = UnitClass("player")
   local map = CLASS_ROLE[class] or CLASS_ROLE.WARRIOR
@@ -60,7 +60,7 @@ end
 function S.SetRole(name)
   CraftUpgradesDB = CraftUpgradesDB or {}
   CraftUpgradesDB.role = CraftUpgradesDB.role or {}
-  CraftUpgradesDB.role[UnitName("player") .. "-" .. GetRealmName()] = (name ~= "auto") and name or nil
+  CraftUpgradesDB.role[(GetUnitName and GetUnitName("player", false) or UnitName("player")) .. "-" .. GetRealmName()] = (name ~= "auto") and name or nil
 end
 
 ---------------------------------------------------------------- reading an item's stats
