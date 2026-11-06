@@ -1,5 +1,11 @@
 Pint's Craft Upgrades - Changelog
 
+v3.2.2
+- WoW Forever: gear with "Increases healing done by up to X and damage done by up to Y" now counts that healing and
+  spell damage (it was ignored, so caster and healer gear scored too low).
+- WoW Forever: your role follows your talent tree again - the one Pint's Tips shows (a Restoration Shaman scores gear
+  as a healer, not melee). The talents weren't being read, so everyone got their class's default role.
+
 v3.2.1
 - WoW Forever: characters are known by their full name (first and second, e.g. "Pint Waterboy"), so characters that
   share a first name no longer share one record. Classic Era is unchanged.

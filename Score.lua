@@ -39,13 +39,27 @@ local CLASS_ROLE = {
 }
 local DUAL_WIELD = { WARRIOR = true, ROGUE = true, HUNTER = true }
 
+-- WoW Forever (modern client): the chosen specialization, when the game has one (same order as the talent trees)
+local function SpecIndex()
+  local get = (C_SpecializationInfo and C_SpecializationInfo.GetSpecialization) or GetSpecialization
+  local ok, i = pcall(function() return get and get() end)
+  if ok and type(i) == "number" and i > 0 and i <= 3 then return i end
+  return 0
+end
+S.SpecIndex = SpecIndex
+
 local function TopTree()
+  -- the talent tree with the most points, read the same way Pint's Tips reads it (trees 1-3: WoW Forever has no
+  -- GetNumTalentTabs, which left every character on its class's default role)
   local best, bestPts = 0, 0
-  for i = 1, (GetNumTalentTabs and GetNumTalentTabs() or 0) do
-    local a, b, c, d, e = GetTalentTabInfo(i)
-    local pts = (type(a) == "number") and e or c
+  local n = math.max(3, (GetNumTalentTabs and GetNumTalentTabs()) or 0)
+  for i = 1, n do
+    local ok, a, b, c, d, e = pcall(GetTalentTabInfo, i)
+    local pts = ok and a and ((type(a) == "number") and e or c)
     if type(pts) == "number" and pts > bestPts then best, bestPts = i, pts end
   end
+  -- no talent points to go on: the specialization the game says you chose, if it has one
+  if best == 0 then best = SpecIndex() end
   return best
 end
 
@@ -74,6 +88,8 @@ local STATMAP = {
 }
 -- "Equip:" lines (enUS Classic wording)
 local EQUIP = {
+  -- "Increases healing done by up to 9 and damage done by up to 3 for all magical spells and effects." (WoW Forever)
+  { "healing done by up to (%d+) and damage done by up to (%d+)", "HEAL", 1, "SP" },
   { "damage and healing done by magical spells and effects by up to (%d+)", "SP" },
   { "healing done by spells and effects by up to (%d+)", "HEAL" },
   { "damage done by %a+ spells and effects by up to (%d+)", "SP", 0.7 },
@@ -98,9 +114,10 @@ function S.Stats(link)
   if cache[link] then return cache[link] end
   local st = {}
   local raw = (C_Item and C_Item.GetItemStats and C_Item.GetItemStats(link)) or (GetItemStats and GetItemStats(link)) or {}
+  local fromList = {}
   for k, v in pairs(raw) do
     local key = STATMAP[k]
-    if key then st[key] = (st[key] or 0) + v end
+    if key then st[key] = (st[key] or 0) + v; fromList[key] = true end
   end
   tip:ClearLines()
   tip:SetOwner(UIParent, "ANCHOR_NONE")
@@ -111,8 +128,13 @@ function S.Stats(link)
       local text = fs and fs:GetText()
       if text and text:find("^Equip:") then
         for _, p in ipairs(EQUIP) do
-          local n = text:match(p[1])
-          if n then st[p[2]] = (st[p[2]] or 0) + tonumber(n) * (p[3] or 1); break end
+          local n, n2 = text:match(p[1])
+          if n then
+            -- (skipped when the game's own stat list already counted it)
+            if not fromList[p[2]] then st[p[2]] = (st[p[2]] or 0) + tonumber(n) * (p[3] or 1) end
+            if p[4] and n2 and not fromList[p[4]] then st[p[4]] = (st[p[4]] or 0) + tonumber(n2) end
+            break
+          end
         end
       elseif text and not raw.ITEM_MOD_STAMINA_SHORT then
         -- older clients: white "+N Stat" lines
