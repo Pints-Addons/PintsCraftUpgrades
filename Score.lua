@@ -58,6 +58,13 @@ local function TopTree()
     local pts = ok and a and ((type(a) == "number") and e or c)
     if type(pts) == "number" and pts > bestPts then best, bestPts = i, pts end
   end
+  -- WoW Forever: the old talent functions say nothing there; Pint's Tips reads the trees the modern way
+  if best == 0 and _G.PintsTips and _G.PintsTips.ReadGrid then
+    local ok, g = pcall(_G.PintsTips.ReadGrid, false)
+    if ok and g then
+      for i = 1, 3 do local t = g[i]; if t and type(t.points) == "number" and t.points > bestPts then best, bestPts = i, t.points end end
+    end
+  end
   -- no talent points to go on: the specialization the game says you chose, if it has one
   if best == 0 then best = SpecIndex() end
   return best

@@ -1,5 +1,10 @@
 Pint's Craft Upgrades - Changelog
 
+v3.2.3
+- WoW Forever: your role comes from your talent trees (read with Pint's Tips) - a Restoration shaman was scored as a
+  caster, so spell-damage gear beat healing gear.
+- New default: the "wear soon" filter is ticked too. (Your own settings are kept.)
+
 v3.2.2
 - WoW Forever: gear with "Increases healing done by up to X and damage done by up to Y" now counts that healing and
   spell damage (it was ignored, so caster and healer gear scored too low).

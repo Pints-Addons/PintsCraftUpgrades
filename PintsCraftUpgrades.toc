@@ -2,7 +2,7 @@
 ## Title: |cffd4a017Pint's|r Craft Upgrades
 ## Notes: Gear your characters can craft (or learn to) that would be an upgrade - for the character you're on, any alt, or what one character can make for the rest. Needs Pint's Alts. /craftup
 ## Author: Jake (Pint's Add-ons, built with Claude)
-## Version: 3.2.2
+## Version: 3.2.3
 ## X-Curse-Project-ID: 1779404
 ## IconTexture: Interface\AddOns\PintsCraftUpgrades\UpgradeArrow
 ## SavedVariables: CraftUpgradesDB

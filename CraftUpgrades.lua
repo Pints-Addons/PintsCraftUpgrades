@@ -696,7 +696,7 @@ boot:RegisterEvent("PLAYER_LOGIN")
 boot:SetScript("OnEvent", function()
   CraftUpgradesDB = CraftUpgradesDB or {}
   CraftUpgradesDB.minimap = CraftUpgradesDB.minimap or { hide = false }
-  CraftUpgradesDB.filters = CraftUpgradesDB.filters or { known = true, now = true, soon = true }
+  CraftUpgradesDB.filters = CraftUpgradesDB.filters or { known = true, now = true, soon = true, wearsoon = true }
   if CraftUpgradesDB.filters.wearsoon == nil then CraftUpgradesDB.filters.wearsoon = true end
   local LDB = LibStub and LibStub("LibDataBroker-1.1", true)
   local Icon = LibStub and LibStub("LibDBIcon-1.0", true)
