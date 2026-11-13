@@ -189,10 +189,41 @@ local SLOT = {
   INVTYPE_WEAPONMAINHAND = { 16 }, INVTYPE_WEAPONOFFHAND = { 17 }, INVTYPE_SHIELD = { 17 }, INVTYPE_HOLDABLE = { 17 },
   INVTYPE_RANGED = { 18 }, INVTYPE_RANGEDRIGHT = { 18 }, INVTYPE_THROWN = { 18 },
 }
+-- what each class can use at all: weapon types (item subclass: 0 1h axe, 1 2h axe, 2 bow, 3 gun, 4 1h mace, 5 2h mace,
+-- 6 polearm, 7 1h sword, 8 2h sword, 10 staff, 13 fist, 15 dagger, 16 thrown, 18 crossbow, 19 wand), the heaviest
+-- armour (1 cloth .. 4 plate), shields and relics - so a wand isn't an "upgrade" for a shaman
+local WEAPONS = {
+  WARRIOR = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 13, 15, 16, 18 }, PALADIN = { 0, 1, 4, 5, 6, 7, 8 },
+  HUNTER = { 0, 1, 2, 3, 6, 7, 8, 10, 13, 15, 16, 18 }, ROGUE = { 2, 3, 4, 7, 13, 15, 16, 18 },
+  PRIEST = { 4, 10, 15, 19 }, SHAMAN = { 0, 1, 4, 5, 10, 13, 15 }, MAGE = { 7, 10, 15, 19 }, WARLOCK = { 7, 10, 15, 19 },
+  DRUID = { 4, 5, 10, 13, 15 },
+}
+local ARMOR_TOP = { WARRIOR = 4, PALADIN = 4, HUNTER = 3, SHAMAN = 3, ROGUE = 2, DRUID = 2, PRIEST = 1, MAGE = 1, WARLOCK = 1 }
+local SHIELDS = { WARRIOR = true, PALADIN = true, SHAMAN = true }
+local RELIC = { [7] = "PALADIN", [8] = "DRUID", [9] = "SHAMAN" }
+local wield = {}
+local function CanUse(link, class)
+  if not class or not WEAPONS[class] then return true end
+  local classID, subID = select(12, GetItemInfo(link))
+  if classID == 2 and subID then
+    local w = wield[class]
+    if not w then w = { [14] = true, [20] = true }; for _, x in ipairs(WEAPONS[class]) do w[x] = true end; wield[class] = w end
+    return w[subID] or false
+  end
+  if classID == 4 and subID then
+    if subID == 6 then return SHIELDS[class] or false end
+    if RELIC[subID] then return RELIC[subID] == class end
+    if subID >= 1 and subID <= 4 then return subID <= (ARMOR_TOP[class] or 1) end
+  end
+  return true
+end
+S.CanUse = CanUse
+
 -- ctx = { role = roleKey, class = "PRIEST", gear = function(slot) return link end }
 local function UpgradeVs(link, ctx)
   local equipLoc = select(9, GetItemInfo(link))
   if not equipLoc or equipLoc == "" then return end
+  if not CanUse(link, ctx.class) then return end
   local role = ctx.role
   local new = S.Value(link, equipLoc, role)
   if new <= 0 then return end

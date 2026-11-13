@@ -1,5 +1,9 @@
 Pint's Craft Upgrades - Changelog
 
+v3.2.4
+- Gear your class can't use (a wand or bow for a shaman, a shield for a priest, plate for a hunter) is never an
+  "upgrade" - in Pint's Quest Book's rewards and everywhere else that asks.
+
 v3.2.3
 - WoW Forever: your role comes from your talent trees (read with Pint's Tips) - a Restoration shaman was scored as a
   caster, so spell-damage gear beat healing gear.
