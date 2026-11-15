@@ -66,8 +66,8 @@ local function TopTree()
     end
   end
   -- no talent points to go on: the specialization the game says you chose, if it has one
-  if best == 0 then best = SpecIndex() end
-  return best
+  if best == 0 then return SpecIndex(), false end
+  return best, true
 end
 
 function S.RoleKey()
@@ -76,7 +76,20 @@ function S.RoleKey()
   if db.role and db.role[key] and S.ROLES[db.role[key]] then return db.role[key], true end
   local _, class = UnitClass("player")
   local map = CLASS_ROLE[class] or CLASS_ROLE.WARRIOR
-  return map[TopTree()] or map[0], false
+  local tree, fromPoints = TopTree()
+  -- WoW Forever often can't read talent points, and its "chosen specialization" just says the first tree: a healer was
+  -- scored as a damage caster, so healing gear counted for nothing. Without talent points to go on, what you're
+  -- wearing decides it for classes that can heal - mostly + healing gear: a healer.
+  if not fromPoints and (class == "SHAMAN" or class == "PRIEST" or class == "PALADIN" or class == "DRUID") then
+    local heal, sp = 0, 0
+    for slot = 1, 18 do
+      local l = GetInventoryItemLink("player", slot)
+      local st = l and S.Stats(l)
+      if st then heal = heal + (st.HEAL or 0); sp = sp + (st.SP or 0) end
+    end
+    if heal > 0 and heal >= sp then return "healer", false end
+  end
+  return map[tree] or map[0], false
 end
 function S.SetRole(name)
   CraftUpgradesDB = CraftUpgradesDB or {}

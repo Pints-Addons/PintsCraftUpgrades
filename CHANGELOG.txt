@@ -1,5 +1,10 @@
 Pint's Craft Upgrades - Changelog
 
+v3.2.5
+- WoW Forever: a healer is scored as a healer. When the game won't say where your talent points are, a Shaman, Priest,
+  Paladin or Druid wearing mostly + healing gear counts as a healer (it was scored as a damage caster, so healing gear
+  counted for nothing and almost anything looked like an upgrade). /craftup role sets it by hand.
+
 v3.2.4
 - Gear your class can't use (a wand or bow for a shaman, a shield for a priest, plate for a hunter) is never an
   "upgrade" - in Pint's Quest Book's rewards and everywhere else that asks.
