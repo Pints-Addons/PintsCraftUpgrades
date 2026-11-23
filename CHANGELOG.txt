@@ -1,5 +1,9 @@
 Pint's Craft Upgrades - Changelog
 
+v3.2.6
+- Gear made for other classes only ("Classes: Priest" - tier pieces, class quest rewards) is no longer counted as an
+  upgrade: not in the upgrade list, and no green arrow in Pint's Bags or Pint's Loot.
+
 v3.2.5
 - WoW Forever: a healer is scored as a healer. When the game won't say where your talent points are, a Shaman, Priest,
   Paladin or Druid wearing mostly + healing gear counts as a healer (it was scored as a damage caster, so healing gear

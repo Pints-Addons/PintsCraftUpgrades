@@ -215,8 +215,52 @@ local ARMOR_TOP = { WARRIOR = 4, PALADIN = 4, HUNTER = 3, SHAMAN = 3, ROGUE = 2,
 local SHIELDS = { WARRIOR = true, PALADIN = true, SHAMAN = true }
 local RELIC = { [7] = "PALADIN", [8] = "DRUID", [9] = "SHAMAN" }
 local wield = {}
+-- "Classes: Priest" on the item (tier sets, class quest rewards, librams...): the classes it's for, or false for anyone
+local classTip, allowCache = nil, {}
+local function Plain(v) if type(issecretvalue) == "function" and issecretvalue(v) then return nil end return v end
+local function ClassesAllowed(link)
+  if type(link) == "number" then link = "item:" .. link end
+  local id = tonumber(link:match("item:(%d+)"))
+  if not id then return false end
+  if allowCache[id] ~= nil then return allowCache[id] end
+  local prefix = (ITEM_CLASSES_ALLOWED or "Classes: %s"):gsub("%%s", "")
+  local lines = {}
+  if C_TooltipInfo and C_TooltipInfo.GetHyperlink then
+    local ok, data = pcall(C_TooltipInfo.GetHyperlink, link)
+    if ok and data and data.lines then for _, l in ipairs(data.lines) do lines[#lines + 1] = Plain(l.leftText) end end
+  else
+    classTip = classTip or CreateFrame("GameTooltip", "CraftUpgradesClassTip", nil, "GameTooltipTemplate")
+    classTip:SetOwner(WorldFrame, "ANCHOR_NONE"); classTip:ClearLines()
+    pcall(classTip.SetHyperlink, classTip, link)
+    for i = 1, classTip:NumLines() do local fs = _G["CraftUpgradesClassTipTextLeft" .. i]; lines[#lines + 1] = fs and fs:GetText() end
+    classTip:Hide()
+  end
+  if #lines == 0 then return false end          -- (not loaded yet: ask again next time)
+  local out = false
+  for _, t in ipairs(lines) do
+    if type(t) == "string" and t:sub(1, #prefix) == prefix then
+      out = {}
+      for n in t:sub(#prefix + 1):gmatch("[^,]+") do out[(n:gsub("^%s+", ""):gsub("%s+$", ""))] = true end
+      break
+    end
+  end
+  allowCache[id] = out
+  return out
+end
+S.ClassesAllowed = ClassesAllowed
+local function ClassOK(link, class)
+  local allowed = ClassesAllowed(link)
+  if not allowed then return true end
+  local m = LOCALIZED_CLASS_NAMES_MALE and LOCALIZED_CLASS_NAMES_MALE[class]
+  local f = LOCALIZED_CLASS_NAMES_FEMALE and LOCALIZED_CLASS_NAMES_FEMALE[class]
+  return (m and allowed[m]) or (f and allowed[f]) or false
+end
+-- for the other add-ons: may this class (WARRIOR, SHAMAN...) use the item (an id or a link)? false only for "Classes:" items
+-- made for other classes
+S.ClassOK = function(item, class) return ClassOK(type(item) == "number" and ("item:" .. item) or item, class) end
 local function CanUse(link, class)
   if not class or not WEAPONS[class] then return true end
+  if not ClassOK(link, class) then return false end
   local classID, subID = select(12, GetItemInfo(link))
   if classID == 2 and subID then
     local w = wield[class]
