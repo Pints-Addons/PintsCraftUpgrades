@@ -1,5 +1,9 @@
 Pint's Craft Upgrades - Changelog
 
+v3.2.7
+- Hunters can't use thrown weapons (warriors and rogues only): thrown weapons are no longer suggested or counted as
+  usable for hunters.
+
 v3.2.6
 - Gear made for other classes only ("Classes: Priest" - tier pieces, class quest rewards) is no longer counted as an
   upgrade: not in the upgrade list, and no green arrow in Pint's Bags or Pint's Loot.
