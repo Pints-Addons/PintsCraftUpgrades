@@ -1,5 +1,9 @@
 Pint's Craft Upgrades - Changelog
 
+v3.2.8
+- Hunters can use thrown weapons after all (a hunter trained Thrown in game): they're suggested and counted as
+  usable for hunters again, as before the last version.
+
 v3.2.7
 - Hunters can't use thrown weapons (warriors and rogues only): thrown weapons are no longer suggested or counted as
   usable for hunters.
